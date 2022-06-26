@@ -21,7 +21,7 @@ namespace Github_Auth
         ╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██████╔╝    ██║  ██║╚██████╔╝   ██║   ██║  ██║
          ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝     ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝
         ";
-        static string auth_url = "https://raw.githubusercontent.com/rarksyy/gh_auth_test/main/username.auth";
+        static string auth_url = "<add raw link here>";
 
         [STAThread]
         static void Main()
