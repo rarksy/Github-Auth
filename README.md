@@ -8,7 +8,7 @@ A simple authentication system using Githubs raw file system and MD5 encryption 
 # Setup
 - Provide link to auth file (either to raw github file or file on a server) for the app to access hashes
 - Add a user by making an md5 hash using a desired username (must be lower case username, you can use https://www.miraclesalad.com/webtools/md5.php, enable "Uppercase hash(es)" on website)
-- once user is prompted to enter password, the password entered will be hashed aswell as hwInfo & username and copied to their clipboard, replace the username hash with the hash copied to clipboard
+- once user is prompted to enter password, the password entered will be hashed aswell as hwInfo & username and copied to clipboard, replace the username hash with the hash copied to clipboard
 - Profit
 
 
