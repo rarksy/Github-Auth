@@ -1,6 +1,7 @@
 # Github-Auth
 
 A simple authentication system using Githubs raw file system and MD5 encryption to secure user data.
+Made in ~4 hours
 
 # Info
 - HWID Authenticated via CPU Serial, First Drive Found On System, Motherboard Serial, all strings reversed then hashed with md5
