@@ -16,3 +16,4 @@ Made in ~4 hours
 # Note
 - Application seems to be auto caching user file, so new users might not be authed for ~5 minutes after adding, just wait a bit and it'll work
 - This is by no means supposed to be 100% secure, its just a simple example of an authentication system in a console application in C#
+- A More Efficient, secure version written in C++ is available at https://github.com/rarksy/Github-Auth-CPP
