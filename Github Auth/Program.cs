@@ -76,7 +76,7 @@ namespace Github_Auth
         EnterUsername:
             user = input("Enter Username: ");
             WebClient client = new WebClient();
-            string user_list = client.DownloadString("https://raw.githubusercontent.com/rarksyy/gh_auth_test/main/cppauth.auth").ToLower();
+            string user_list = client.DownloadString("input raw link here").ToLower();
 
             if (user_list.Contains(user.ToLower() + createmd5(user.ToLower()).ToLower())) {
         EnterPassword:
