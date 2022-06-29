@@ -11,7 +11,7 @@ namespace Github_Auth
 {
     class func
     {
-        public static void log<T>(T arg, ConsoleColor Col = ConsoleColor.White) { Console.ForegroundColor = Col; Console.WriteLine($"\n{arg}"); Console.ForegroundColor = ConsoleColor.White; }
+        public static void log<T>(T arg, ConsoleColor Col = ConsoleColor.Gray) { Console.ForegroundColor = Col; Console.Write($"{arg}"); Console.ForegroundColor = ConsoleColor.Gray; }
         public static void spacer() { Console.WriteLine(Environment.NewLine); }
         public static string input(string label = null, bool password = false)
         {

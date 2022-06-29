@@ -1,105 +1,115 @@
 ﻿using static Github_Auth.func;
-using System.Net;
 using System;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+using System.Net;
 using System.Windows;
 
 namespace Github_Auth
 {
     internal class Program
     {
-        static string username_input;
         static string loginASCII = @"
-         ██████╗ ██╗████████╗██╗  ██╗██╗   ██╗██████╗      █████╗ ██╗   ██╗████████╗██╗  ██╗
-        ██╔════╝ ██║╚══██╔══╝██║  ██║██║   ██║██╔══██╗    ██╔══██╗██║   ██║╚══██╔══╝██║  ██║
-        ██║  ███╗██║   ██║   ███████║██║   ██║██████╔╝    ███████║██║   ██║   ██║   ███████║
-        ██║   ██║██║   ██║   ██╔══██║██║   ██║██╔══██╗    ██╔══██║██║   ██║   ██║   ██╔══██║
-        ╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██████╔╝    ██║  ██║╚██████╔╝   ██║   ██║  ██║
-         ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝     ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝
+ ██████╗ ██╗████████╗██╗  ██╗██╗   ██╗██████╗      █████╗ ██╗   ██╗████████╗██╗  ██╗
+██╔════╝ ██║╚══██╔══╝██║  ██║██║   ██║██╔══██╗    ██╔══██╗██║   ██║╚══██╔══╝██║  ██║
+██║  ███╗██║   ██║   ███████║██║   ██║██████╔╝    ███████║██║   ██║   ██║   ███████║
+██║   ██║██║   ██║   ██╔══██║██║   ██║██╔══██╗    ██╔══██║██║   ██║   ██║   ██╔══██║
+╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██████╔╝    ██║  ██║╚██████╔╝   ██║   ██║  ██║
+ ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝     ╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝
         ";
-        static string auth_url = "<add raw link here>";
 
         [STAThread]
-        static void Main()
-        {
+        static void Main() {
             log(loginASCII, ConsoleColor.Green);
             spacer();
-        InitLogin:
-            username_input = input("Enter Username: ");
+            spacer();
+            log("["); log(1, ConsoleColor.Magenta); log("] Login\n", ConsoleColor.Gray);
+            log("["); log(2, ConsoleColor.Magenta); log("] Register\n", ConsoleColor.Gray);
 
-            using (WebClient client = new WebClient())
+            while (true)
             {
-                Random random = new Random();
-                bool valid_username = client.DownloadString(auth_url+$"?random={random.Next()}").Contains(createmd5(username_input.ToLower()));
-                if (valid_username) login();
-                else {log("Invalid Username", ConsoleColor.Red); goto InitLogin; }
+                var key = Console.ReadKey(true);
+
+                if (key.Key == ConsoleKey.D1) {
+                    login();
+                    break;
+                }
+                if (key.Key == ConsoleKey.D2) {
+                    register();
+                    break;
+                }
+
+                else continue;
+            }   
+        }
+
+        static void register() {
+            string user, pass;
+        EnterUsername:
+            user = input("Enter A Username: ");
+            WebClient client = new WebClient();
+            string user_list = client.DownloadString("https://raw.githubusercontent.com/rarksyy/gh_auth_test/main/cppauth.auth");
+            if (user_list.Contains(user.ToLower()+createmd5(user.ToLower()))) {
+                log("Username Already In Use. Contact Support To Reset HWID\n", ConsoleColor.Red);
+                goto EnterUsername;
+            }
+            else {
+                pass = input("Enter A Password: ", true);
+                string CPUID = gethwinfo("win32_processor", "processorID"),
+                 CSerial = int.Parse(gethwinfo("Win32_LogicalDisk", "VolumeSerialNumber"), System.Globalization.NumberStyles.HexNumber).ToString();
+                string md5info = createmd5(user.ToLower()) + createmd5(reversestring(CPUID + CSerial + Environment.UserName)) + createmd5(pass);
+                Clipboard.SetText(user.ToLower()+md5info.ToLower());
+
+                log("\nAuth Info Copied To Clipboard, Contact Owner / Support", ConsoleColor.Green);
+                log("\nExiting In 6");
+                for (int i = 5; i >= 0; i--) {
+                    Thread.Sleep(1000);
+                    Console.Write("\x1B[1D");
+                    Console.Write("\x1B[1P");
+                    Console.Write(i);
+                }
             }
         }
 
-        static void login()
-        {
-        InitPassword:
-            string password_input = String.Empty;
-            password_input = input("Enter Password: ", true);
+        static void login() {
 
-            string CSerial = gethwinfo("Win32_LogicalDisk", "VolumeSerialNumber"),
-            CPUID = gethwinfo("win32_processor", "processorID"),
-            MOBOID = gethwinfo("Win32_BaseBoard", "SerialNumber"),
-            password = createmd5(password_input),
-            reversed = reversestring($"{username_input}{CSerial}{CPUID}{MOBOID}"),
-            md5ified = createmd5(reversed);
-            
-            using (WebClient client = new WebClient())
-            {
-                string usermd5 = createmd5(username_input.ToLower());
-                Random random = new Random();
-                string auth = client.DownloadString(auth_url+"?random="+DateTime.Now.Ticks);
-                if (!auth.Contains(md5ified))
-                {
-                    log(auth);
-                    InvalidAuthInfo(usermd5 + md5ified + password);
-                }
-                string cur;
-                StringReader sr = new StringReader(auth);
-                while ((cur = sr.ReadLine()) != null)
-                {
-                    if (cur.Contains(usermd5+md5ified))
-                    {
-                        if (cur.Length == md5ified.Length)
-                        {
-                            log(auth);
-                            InvalidAuthInfo(usermd5+md5ified+password);
-                            Thread.Sleep(10000);
-                        }
-                        else if (cur.Length > md5ified.Length)
-                        {
-                            if (cur != usermd5 + md5ified + password)
-                            {
-                                log("Invalid Password", ConsoleColor.Red);
-                                goto InitPassword;
-                            }
-                            if (cur.Contains(md5ified + password))
-                            {
-                                Continue();
-                            }
-                            else
-                            {
-                                log("error");
-                                Thread.Sleep(10000);
-                            }
-                        }
+            string user, pass;
+        EnterUsername:
+            user = input("Enter Username: ");
+            WebClient client = new WebClient();
+            string user_list = client.DownloadString("https://raw.githubusercontent.com/rarksyy/gh_auth_test/main/cppauth.auth").ToLower();
+
+            if (user_list.Contains(user.ToLower() + createmd5(user.ToLower()).ToLower())) {
+        EnterPassword:
+                pass = input("Enter Password: ", true);
+                string hwInfo = user.ToLower() + createmd5(user.ToLower()).ToLower() + createmd5(
+                                 reversestring(
+                                 gethwinfo("win32_processor", "processorID") +
+                                 int.Parse(gethwinfo("Win32_LogicalDisk", "VolumeSerialNumber"),
+                                 System.Globalization.NumberStyles.HexNumber).ToString() +
+                                 Environment.UserName.ToLower()));
+                if (user_list.Contains(hwInfo.ToLower())) {
+                    if (user_list.Contains(hwInfo.ToLower() + createmd5(pass).ToLower())) {
+                        Access();
+                    }
+                    else {
+                        log("Incorrect Password\n", ConsoleColor.Red);
+                        goto EnterPassword;
                     }
                 }
+                else {
+                    log("Incorrect HWID\n", ConsoleColor.Red);
+                    log(hwInfo);
+                    goto EnterUsername;
+                }
             }
+            else {
+                log("Invalid Username\n", ConsoleColor.Red);
+                goto EnterUsername;
+            }
+
         }
 
-        private static void Continue()
-        {
-            //successfully logged in, do whatever you want here
+        static void Access() {
             log("success");
             Thread.Sleep(10000);
         }
