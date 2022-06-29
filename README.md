@@ -5,12 +5,13 @@ Made in ~4 hours
 
 # Info
 - HWID Authenticated via CPU Serial, First Drive Found On System, Motherboard Serial, all strings reversed then hashed with md5
+- Hash syntax is the same as the c++ version so active users will work on both versions
 
 # Setup
 - Provide link to auth file (either to raw github file or file on a server) for the app to access hashes
-- Add a user by making an md5 hash using a desired username (must be lower case username, you can use https://www.miraclesalad.com/webtools/md5.php, enable "Uppercase hash(es)" on website)
-- once user is prompted to enter password, the password entered will be hashed aswell as hwInfo & username and copied to clipboard, replace the username hash with the hash copied to clipboard
-- Re-Enter username:password on next launch
+- Hit '2' To enter register setup in program, this will generate a users auth hash
+- paste the hash to your file
+- wait for cache to expire and enjoy
 
 
 # Note
