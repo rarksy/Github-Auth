@@ -47,7 +47,7 @@ namespace Github_Auth
         EnterUsername:
             user = input("Enter A Username: ");
             WebClient client = new WebClient();
-            string user_list = client.DownloadString("https://raw.githubusercontent.com/rarksyy/gh_auth_test/main/cppauth.auth");
+            string user_list = client.DownloadString("<raw data file link here>");
             if (user_list.Contains(user.ToLower()+createmd5(user.ToLower()))) {
                 log("Username Already In Use. Contact Support To Reset HWID\n", ConsoleColor.Red);
                 goto EnterUsername;
@@ -76,7 +76,7 @@ namespace Github_Auth
         EnterUsername:
             user = input("Enter Username: ");
             WebClient client = new WebClient();
-            string user_list = client.DownloadString("input raw link here").ToLower();
+            string user_list = client.DownloadString("<raw data file link here").ToLower();
 
             if (user_list.Contains(user.ToLower() + createmd5(user.ToLower()).ToLower())) {
         EnterPassword:
